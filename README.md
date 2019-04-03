@@ -8,7 +8,7 @@ Common methods fully workable, but not all API elements released.
 ### install:
 
 ```go
-go get -u github.com/sg3des/mikrotik
+go get -u github.com/icadsistemi/lib-mikrotik
 ```
 
 ### usage:
