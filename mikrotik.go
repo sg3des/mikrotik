@@ -66,6 +66,24 @@ func (mik *Mikrotik) setMikrotikCommands() {
 			},
 			Option: cmd{mikrotik: mik, path: "/ip/dhcp-client/option"},
 		},
+		DHCPServer: DHCPServerCMD{
+			cmd: cmd{
+				mikrotik: mik,
+				path:     "/ip/dhcp-server",
+			},
+			Alert: DHCPSAlert{
+				cmd: cmd{
+					mikrotik: mik,
+					path:     "/ip/dhcp-server/alert",
+				},
+			},
+			Lease: DHCPSLease{
+				cmd: cmd{
+					mikrotik: mik,
+					path:     "/ip/dhcp-server/lease",
+				},
+			},
+		},
 	}
 
 	mik.System = system{
