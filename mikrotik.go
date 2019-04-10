@@ -20,16 +20,6 @@ type Mikrotik struct {
 	debug bool
 }
 
-type ip struct {
-	Address  cmd
-	Route    cmd
-	Firewall firewall
-}
-type firewall struct {
-	NAT    cmd
-	Mangle cmd
-}
-
 type ppp struct {
 	AAA        cfg
 	L2tpSecret cmd
@@ -62,6 +52,20 @@ func (mik *Mikrotik) setMikrotikCommands() {
 			NAT:    cmd{mikrotik: mik, path: "/ip/firewall/nat"},
 			Mangle: cmd{mikrotik: mik, path: "/ip/firewall/mangle"},
 		},
+		Cloud: IPCloudCMD{
+			cmd: cmd{
+				mikrotik: mik,
+				path:     "/ip/cloud",
+			},
+			Advanced: cfg{mikrotik: mik, path: "/ip/cloud/advanced"},
+		},
+		DHCPClient: DHCPClientCMD{
+			cmd: cmd{
+				mikrotik: mik,
+				path:     "/ip/dhcp-client",
+			},
+			Option: cmd{mikrotik: mik, path: "/ip/dhcp-client/option"},
+		},
 	}
 
 	mik.System = system{
@@ -74,8 +78,31 @@ func (mik *Mikrotik) setMikrotikCommands() {
 	mik.Interface = netinterface{
 		mikrotik:   mik,
 		path:       "/interface",
-		SSTPServer: cmd{mikrotik: mik, path: "/interface/sstp-server"},
-		SSTPClient: cmd{mikrotik: mik, path: "/interface/sstp-client"},
+		SSTPClient: cmd{mikrotik: mik, path: "/interface/sstp-server"},
+		SSTPServer: netsstpserver{
+			cmd: cmd{
+				mikrotik: mik,
+				path:     "/interface/sstp-client",
+			},
+			Server: cfg{mikrotik: mik, path: "/interface/sstp-client/server"},
+		},
+		PPPOEClient: cmd{mikrotik: mik, path: "/interface/pppoe-client"},
+		Ethernet:    cmd{mikrotik: mik, path: "/interface/ethernet"},
+		List: netlist{
+			cmd: cmd{
+				mikrotik: mik,
+				path:     "/interface/list",
+			},
+			Member: cmd{mikrotik: mik, path: "/interface/list/member"},
+		},
+		Bridge: netbridge{
+			cmd: cmd{
+				mikrotik: mik,
+				path:     "/interface/bridge",
+			},
+			Settings: cfg{mikrotik: mik, path: "/interface/bridge/settings"},
+			Port:     cmd{mikrotik: mik, path: "/interface/bridge/ports"},
+		},
 		Wireless: wireless{
 			cmd: cmd{
 				mikrotik: mik,

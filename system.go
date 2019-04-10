@@ -18,7 +18,7 @@ type identity struct {
 	path     string
 }
 
-func (c *cfg) Get(v interface{}) error {
+func (c *cfg) Print(v interface{}) error {
 	return c.mikrotik.Print(c.path+"/print", v)
 }
 

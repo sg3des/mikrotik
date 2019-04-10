@@ -5,9 +5,30 @@ type netinterface struct {
 	mikrotik *Mikrotik
 	path     string
 
-	SSTPClient cmd
-	SSTPServer cmd
-	Wireless   wireless
+	SSTPClient  cmd
+	SSTPServer  netsstpserver
+	Ethernet    cmd
+	List        netlist
+	Bridge      netbridge
+	PPPOEClient cmd
+
+	Wireless wireless
+}
+
+type netsstpserver struct {
+	cmd
+	Server cfg
+}
+
+type netlist struct {
+	cmd
+	Member cmd
+}
+
+type netbridge struct {
+	cmd
+	Settings cfg
+	Port     cmd
 }
 
 type wireless struct {
@@ -18,7 +39,7 @@ type wireless struct {
 	SecurityProfiles cmd
 }
 
-func (c *netinterface) List(v interface{}) error {
+func (c *netinterface) Print(v interface{}) error {
 	return c.mikrotik.Print(c.path+"/print", v)
 }
 

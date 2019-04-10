@@ -56,7 +56,7 @@ type cmd struct {
 	path     string
 }
 
-func (c *cmd) List(v interface{}) error {
+func (c *cmd) Print(v interface{}) error {
 	return c.mikrotik.Print(c.path+"/print", v)
 }
 
@@ -69,7 +69,7 @@ func (c *cmd) Find(where string, v interface{}) error {
 	return c.mikrotik.ParseResponce(re, v)
 }
 
-func (c *cmd) Get(id string, v interface{}) error {
+func (c *cmd) PrintWhere(id string, v interface{}) error {
 	re, err := c.mikrotik.RunArgs(c.path+"/print", "where", "?.id="+id)
 	if err != nil {
 		return err
