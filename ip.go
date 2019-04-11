@@ -5,17 +5,14 @@ import "fmt"
 type ip struct {
 	Address    cmd
 	Route      cmd
-	Firewall   firewall
-	Cloud      IPCloudCMD
-	DHCPClient DHCPClientCMD
-	DHCPServer DHCPServerCMD
+	Firewall   firewallCMD
+	Cloud      ipCloudCMD
+	DNS        dnsCMD
+	DHCPClient dhcpClientCMD
+	DHCPServer dhcpServerCMD
 	Service    cmd
-	SSH        SSHCMD
-}
-
-type firewall struct {
-	NAT    cmd
-	Mangle cmd
+	SSH        sshCMD
+	Neighbor   neighborCMD
 }
 
 // ====================================
@@ -34,12 +31,12 @@ func (ipa IPAddress) String() string {
 //
 // ====================================
 
-type IPCloudCMD struct {
+type ipCloudCMD struct {
 	cmd
 	Advanced cfg
 }
 
-func (ipc *IPCloudCMD) ForceUpdate() error {
+func (ipc *ipCloudCMD) ForceUpdate() error {
 	_, err := ipc.cmd.mikrotik.RunArgs(ipc.cmd.path + "/force-update")
 	return err
 }
@@ -50,17 +47,17 @@ func (ipc *IPCloudCMD) ForceUpdate() error {
 //
 // ====================================
 
-type DHCPClientCMD struct {
+type dhcpClientCMD struct {
 	cmd
 	Option cmd
 }
 
-func (dhcpc *DHCPClientCMD) Renew(id string) error {
+func (dhcpc *dhcpClientCMD) Renew(id string) error {
 	_, err := dhcpc.cmd.mikrotik.RunArgs(dhcpc.cmd.path+"/renew", "=numbers="+id)
 	return err
 }
 
-func (dhcpc *DHCPClientCMD) Release(id string) error {
+func (dhcpc *dhcpClientCMD) Release(id string) error {
 	_, err := dhcpc.cmd.mikrotik.RunArgs(dhcpc.cmd.path+"/release", "=numbers="+id)
 	return err
 }
@@ -71,39 +68,39 @@ func (dhcpc *DHCPClientCMD) Release(id string) error {
 //
 // ====================================
 
-type DHCPServerCMD struct {
+type dhcpServerCMD struct {
 	cmd
-	Alert   DHCPSAlert
-	Lease   DHCPSLease
+	Alert   dhcpSAlert
+	Lease   dhcpSLease
 	Config  cfg
 	Network cmd
-	Option  DHCPSOption
+	Option  dhcpSOption
 }
 
-type DHCPSAlert struct {
+type dhcpSAlert struct {
 	cmd
 }
 
-func (dhcpsa *DHCPSAlert) ResetAlert(id string) error {
+func (dhcpsa *dhcpSAlert) ResetAlert(id string) error {
 	_, err := dhcpsa.cmd.mikrotik.RunArgs(dhcpsa.cmd.path+"/reset-alert", "=numbers="+id)
 	return err
 }
 
-type DHCPSLease struct {
+type dhcpSLease struct {
 	cmd
 }
 
-func (dhcpsl *DHCPSLease) MakeStatic(id string) error {
+func (dhcpsl *dhcpSLease) MakeStatic(id string) error {
 	_, err := dhcpsl.cmd.mikrotik.RunArgs(dhcpsl.cmd.path+"/make-static", "=numbers="+id)
 	return err
 }
 
-func (dhcpsl *DHCPSLease) CheckStatus(id string) error {
+func (dhcpsl *dhcpSLease) CheckStatus(id string) error {
 	_, err := dhcpsl.cmd.mikrotik.RunArgs(dhcpsl.cmd.path+"/check-status", "=numbers="+id)
 	return err
 }
 
-type DHCPSOption struct {
+type dhcpSOption struct {
 	cmd
 	Sets cmd
 }
@@ -114,21 +111,21 @@ type DHCPSOption struct {
 //
 // ====================================
 
-type SSHCMD struct {
+type sshCMD struct {
 	cfg
 }
 
-func (ssh *SSHCMD) ExportHostKey(prefix string) error {
+func (ssh *sshCMD) ExportHostKey(prefix string) error {
 	_, err := ssh.cfg.mikrotik.RunArgs(ssh.cfg.path+"/export-host-key", "=key-file-prefix="+prefix)
 	return err
 }
 
-func (ssh *SSHCMD) ImportHostKey(key string) error {
+func (ssh *sshCMD) ImportHostKey(key string) error {
 	_, err := ssh.cfg.mikrotik.RunArgs(ssh.cfg.path+"/import-host-key", "=private-key-file="+key)
 	return err
 }
 
-func (ssh *SSHCMD) RegenerateHostKey(prefix string) error {
+func (ssh *sshCMD) RegenerateHostKey(prefix string) error {
 	_, err := ssh.cfg.mikrotik.RunArgs(ssh.cfg.path + "/regenerate-host-key")
 	return err
 }
@@ -136,5 +133,75 @@ func (ssh *SSHCMD) RegenerateHostKey(prefix string) error {
 // ====================================
 //
 // DNS
+//
+// ====================================
+
+type dnsCMD struct {
+	cfg
+	Static cmd
+	Cache  dnsCacheCMD
+}
+
+type dnsCacheCMD struct {
+	cfg
+	All cfg
+}
+
+func (dnsc *dnsCacheCMD) Flush() error {
+	_, err := dnsc.cfg.mikrotik.RunArgs(dnsc.cfg.path + "/flush")
+	return err
+}
+
+// ====================================
+//
+// Firewall
+//
+// ====================================
+
+type firewallCMD struct {
+	NAT    cmd
+	Mangle cmd
+	Filter firewallFilterCMD
+}
+
+type firewallFilterCMD struct {
+	cmd
+}
+
+func (ff *firewallFilterCMD) ResetCounters(id string) error {
+	_, err := ff.cmd.mikrotik.RunArgs(ff.cmd.path+"/reset-counters", "=numbers="+id)
+	return err
+}
+
+func (ff *firewallFilterCMD) ResetCountersAll() error {
+	_, err := ff.cmd.mikrotik.RunArgs(ff.cmd.path + "/reset-counters-all")
+	return err
+}
+
+// ====================================
+//
+// Neighbor
+//
+// ====================================
+
+type neighborCMD struct {
+	cmd
+	DiscoverySettings cmd
+}
+
+// ====================================
+//
+// Pools
+//
+// ====================================
+
+type poolCMD struct {
+	cmd
+	Used cfg
+}
+
+// ====================================
+//
+// Route
 //
 // ====================================

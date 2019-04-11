@@ -1,5 +1,10 @@
 package mikrotik
 
+import (
+	"fmt"
+	"net"
+)
+
 // ====================================
 //
 // Address
@@ -128,7 +133,7 @@ type IPDHCPClient struct {
 
 // ====================================
 //
-// DHCP Server `mikrotik:""`
+// DHCP Server
 //
 // ====================================
 
@@ -213,4 +218,305 @@ type IPDHCPServerConfig struct {
 	StoreLeasesDisk string `mikrotik:"store-leases-disk"`
 }
 
-// Da completare
+type IPDHCPServerAlert struct {
+	ID            string `mikrotik:".id"`
+	AlertTimeout  string `mikrotik:"alert-timeout"`
+	Disabled      string `mikrotik:"disabled"`
+	Interface     string `mikrotik:"interface"`
+	Invalid       string `mikrotik:"invalid"`
+	OnAlert       string `mikrotik:"on-alert"`
+	UnknownServer string `mikrotik:"unknown-server"`
+	ValidServer   string `mikrotik:"valid-server"`
+}
+
+// ====================================
+//
+// DNS
+//
+// ====================================
+
+type IPDNS struct {
+	AllowRemoteRequests      bool   `mikrotik:"allow-remote-requests"`
+	CacheMaxTTL              string `mikrotik:"cache-max-ttl"`
+	CacheSize                int    `mikrotik:"cache-size"`
+	CacheUsed                int    `mikrotik:"cache-used"`
+	DynamicServers           string `mikrotik:"dynamic-servers"`
+	MaxConcurrentQueries     int    `mikrotik:"max-concurrent-queries"`
+	MaxConcurrentTCPSessions int    `mikrotik:"max-concurrent-tcp-sessions"`
+	MaxUDPPacketSize         int    `mikrotik:"max-udp-packet-size"`
+	QueryServerTimeout       string `mikrotik:"query-server-timeout"`
+	QueryTotalTimeout        string `mikrotik:"query-total-timeout"`
+	Servers                  string `mikrotik:"servers"`
+}
+
+type IPDNSStatic struct {
+	ID       string `mikrotik:".id"`
+	Address  string `mikrotik:"address"`
+	Disabled bool   `mikrotik:"disabled"`
+	Dynamic  bool   `mikrotik:"dynamic"`
+	Name     string `mikrotik:"name"`
+	Regexp   string `mikrotik:"regexp"`
+	TTL      string `mikrotik:"ttl"`
+}
+
+type IPDNSCache struct {
+	ID      string `mikrotik:".id"`
+	Address string `mikrotik:"address"`
+	Name    string `mikrotik:"name"`
+	Static  bool   `mikrotik:"static"`
+	TTL     string `mikrotik:"ttl"`
+}
+
+type IPDNSCacheAll struct {
+	ID     string `mikrotik:".id"`
+	Data   string `mikrotik:"data"`
+	Name   string `mikrotik:"name"`
+	Static string `mikrotik:"static"`
+	TTL    string `mikrotik:"ttl"`
+	Type   string `mikrotik:"type"`
+}
+
+// ====================================
+//
+// Firewall
+//
+// ====================================
+
+type IPFirewallNATRule struct {
+	ID string `mikrotik:".id"`
+
+	Chain  string
+	Action string
+
+	Protocol    string
+	SrcAddress  net.IP
+	DstAddress  net.IP
+	ToAddresses string
+	ToPorts     string
+
+	InInterface  string
+	OutInterface string
+
+	SrcPort int
+	DstPort int
+	Port    int
+
+	PacketMark     string
+	ConnectionMark string
+	RoutingMark    string
+	RoutingTable   string
+
+	ConnectionType string
+
+	Log       bool
+	LogPrefix string
+
+	Bytes    int
+	Packets  int
+	Invalid  bool
+	Dynamic  bool
+	Disabled bool
+
+	Comment string
+}
+
+const (
+	ChainSrcNAT = "srcnat"
+	ChainDstNAT = "dstnat"
+)
+
+const (
+	FirewallActionAccept              = "accept"
+	FirewallActionAddDstToAddressList = "add-dst-to-address-list"
+	FirewallActionDstNAT              = "dst-nat"
+	FirewallActionJump                = "jump"
+	FirewallActionLog                 = "log"
+	FirewallActionMasquerade          = "masquerade"
+	FirewallActionNetmap              = "netmap"
+	FirewallActionPassthrough         = "passthrough"
+	FirewallActionRedirect            = "redirect"
+	FirewallActionReturn              = "return"
+	FirewallActionSame                = "same"
+	FirewallActionSrcNAT              = "src-nat"
+)
+
+type IPFirewallMangleRule struct {
+	ID string `mikrotik:".id"`
+
+	Action string
+	Chain  string
+
+	NewRoutingMark    string
+	NewConnectionMark string
+	NewPacketMark     string
+
+	ConnectionMark string
+	PacketMark     string
+
+	Passthrough     bool
+	ConnectionState string
+	DstAddressType  string
+
+	InInterface string
+	Nth         string
+
+	Log       bool
+	LogPrefix string
+
+	Bytes   int
+	Packets int
+
+	Invalid  bool
+	Dynamic  bool
+	Disabled bool
+
+	Comment string
+}
+
+type IPFirewallFilter struct {
+	ID                      string `mikrotik:".id"`
+	Action                  string `mikrotik:"action"`
+	AddressList             string `mikrotik:"address-list"`
+	AddressListTimeout      string `mikrotik:"address-list-timeout"`
+	Bytes                   string `mikrotik:"bytes"`
+	Chain                   string `mikrotik:"chain"`
+	Comment                 string `mikrotik:"comment"`
+	ConnectionBytes         int    `mikrotik:"connection-bytes"`
+	ConnectionLimit         int    `mikrotik:"connection-limit"`
+	ConnectionMark          string `mikrotik:"connection-mark"`
+	ConnectionNatState      string `mikrotik:"connection-nat-state"`
+	ConnectionRate          int    `mikrotik:"connection-rate"`
+	ConnectionState         string `mikrotik:"connection-state"`
+	ConnectionType          string `mikrotik:"connection-type"`
+	Content                 string `mikrotik:"content"`
+	Dscp                    int    `mikrotik:"dscp"`
+	DstAddress              string `mikrotik:"dst-address"`
+	DstAddressList          string `mikrotik:"dst-address-list"`
+	DstAddressType          string `mikrotik:"dst-address-type"`
+	DstLimit                string `mikrotik:"dst-limit"`
+	DstPort                 int    `mikrotik:"dst-port"`
+	Fragment                bool   `mikrotik:"fragment"`
+	Hotspot                 string `mikrotik:"hotspot"`
+	IcmpOptions             int    `mikrotik:"icmp-options"`
+	InBridgePort            string `mikrotik:"in-bridge-port"`
+	InBridgePortList        string `mikrotik:"in-bridge-port-list"`
+	InInterface             string `mikrotik:"in-interface"`
+	InInterfaceList         string `mikrotik:"in-interface-list"`
+	IngressPriority         int    `mikrotik:"ingress-priority"`
+	IpsecPolicy             string `mikrotik:"ipsec-policy"`
+	Ipv4Options             string `mikrotik:"ipv4-options"`
+	JumpTarget              string `mikrotik:"jump-target"`
+	Layer7Protocol          string `mikrotik:"layer7-protocol"`
+	Limit                   int    `mikrotik:"limit"`
+	LogPrefix               string `mikrotik:"log-prefix"`
+	Nth                     int    `mikrotik:"nth"`
+	OutBridgePort           string `mikrotik:"out-bridge-port"`
+	OutBridgePortList       string `mikrotik:"out-bridge-port-list"`
+	OutInterface            string `mikrotik:"out-interface"`
+	OutInterfaceList        string `mikrotik:"out-interface-list"`
+	PacketMark              string `mikrotik:"packet-mark"`
+	PacketSize              int    `mikrotik:"packet-size"`
+	PerConnectionClassifier string `mikrotik:"per-connection-classifier"`
+	Port                    int    `mikrotik:"port"`
+	Priority                int    `mikrotik:"priority"`
+	Protocol                string `mikrotik:"protocol"`
+	Psd                     int    `mikrotik:"psd"`
+	Random                  int    `mikrotik:"random"`
+	RejectWith              string `mikrotik:"reject-with"`
+	RoutingTable            string `mikrotik:"routing-table"`
+	RoutingMark             string `mikrotik:"routing-mark"`
+	SrcAddress              string `mikrotik:"src-address"`
+	SrcAddressList          string `mikrotik:"src-address-list"`
+	SrcAddressType          string `mikrotik:"src-address-type"`
+	SrcPort                 int    `mikrotik:"src-port"`
+	SrcMacAddress           string `mikrotik:"src-mac-address"`
+	TCPFlags                string `mikrotik:"tcp-flags"`
+	TCPMss                  int    `mikrotik:"tcp-mss"`
+	Time                    string `mikrotik:"time"`
+	TLSHost                 string `mikrotik:"tls-host"`
+	TTL                     int    `mikrotik:"ttl"`
+	Dynamic                 string `mikrotik:"dynamic"`
+	Invalid                 string `mikrotik:"invalid"`
+	Packets                 string `mikrotik:"packets"`
+}
+
+// ====================================
+//
+// Neighbor
+//
+// ====================================
+
+type IPNeighbor struct {
+	ID                string `mikrotik:".id"`
+	Address           string `mikrotik:"address"`
+	Address6          string `mikrotik:"address6"`
+	Age               string `mikrotik:"age"`
+	Board             string `mikrotik:"board"`
+	Identity          string `mikrotik:"identity"`
+	Interface         string `mikrotik:"interface"`
+	InterfaceName     string `mikrotik:"interface-name"`
+	Ipv6              bool   `mikrotik:"ipv6"`
+	MacAddress        string `mikrotik:"mac-address"`
+	Platform          string `mikrotik:"platform"`
+	SoftwareID        string `mikrotik:"software-id"`
+	SystemCaps        string `mikrotik:"system-caps"`
+	SystemCapsEnabled string `mikrotik:"system-caps-enabled"`
+	Unpack            string `mikrotik:"unpack"`
+	Uptime            string `mikrotik:"uptime"`
+	Version           string `mikrotik:"version"`
+}
+
+type IPNeighbordDiscoverySettings struct {
+	DiscoverInterfaceList string `mikrotik:"discover-interface-list"`
+}
+
+// ====================================
+//
+// Pools
+//
+// ====================================
+
+type IPPool struct {
+	ID       string `mikrotik:".id"`
+	Name     string `mikrotik:"name"`
+	NextPool string `mikrotik:"next-pool"`
+	Ranges   string `mikrotik:"ranges"`
+}
+
+type IPPoolUsed struct {
+	ID      string `mikrotik:".id"`
+	Address string `mikrotik:"address"`
+	Info    string `mikrotik:"info"`
+	Owner   string `mikrotik:"owner"`
+	Pool    string `mikrotik:"pool"`
+}
+
+// ====================================
+//
+// Route
+//
+// ====================================
+
+type IPRoute struct {
+	ID string `mikrotik:".id"`
+
+	DstAddress    string
+	PrefSrc       string
+	Gateway       string
+	GatewayStatus string
+
+	Distance    int
+	Scope       int
+	TargetScope int
+
+	Active   bool
+	Dynamic  bool
+	Static   bool
+	Disabled bool
+
+	Comment string
+}
+
+func (r IPRoute) String() string {
+	return fmt.Sprintf("%s %s %s %d %s", r.DstAddress, r.PrefSrc, r.Gateway, r.Distance, r.Comment)
+}

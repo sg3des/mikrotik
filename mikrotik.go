@@ -48,41 +48,60 @@ func (mik *Mikrotik) setMikrotikCommands() {
 	mik.IP = ip{
 		Address: cmd{mikrotik: mik, path: "/ip/address"},
 		Route:   cmd{mikrotik: mik, path: "/ip/route"},
-		Firewall: firewall{
+		Firewall: firewallCMD{
 			NAT:    cmd{mikrotik: mik, path: "/ip/firewall/nat"},
 			Mangle: cmd{mikrotik: mik, path: "/ip/firewall/mangle"},
+			Filter: firewallFilterCMD{
+				cmd: cmd{mikrotik: mik, path: "/ip/firewall/filter"},
+			},
 		},
-		Cloud: IPCloudCMD{
+		Cloud: ipCloudCMD{
 			cmd: cmd{
 				mikrotik: mik,
 				path:     "/ip/cloud",
 			},
 			Advanced: cfg{mikrotik: mik, path: "/ip/cloud/advanced"},
 		},
-		DHCPClient: DHCPClientCMD{
+		DHCPClient: dhcpClientCMD{
 			cmd: cmd{
 				mikrotik: mik,
 				path:     "/ip/dhcp-client",
 			},
 			Option: cmd{mikrotik: mik, path: "/ip/dhcp-client/option"},
 		},
-		DHCPServer: DHCPServerCMD{
+		DHCPServer: dhcpServerCMD{
 			cmd: cmd{
 				mikrotik: mik,
 				path:     "/ip/dhcp-server",
 			},
-			Alert: DHCPSAlert{
+			Alert: dhcpSAlert{
 				cmd: cmd{
 					mikrotik: mik,
 					path:     "/ip/dhcp-server/alert",
 				},
 			},
-			Lease: DHCPSLease{
+			Lease: dhcpSLease{
 				cmd: cmd{
 					mikrotik: mik,
 					path:     "/ip/dhcp-server/lease",
 				},
 			},
+		},
+		DNS: dnsCMD{
+			cfg:    cfg{mikrotik: mik, path: "/ip/dns"},
+			Static: cmd{mikrotik: mik, path: "/ip/dns/static"},
+			Cache: dnsCacheCMD{
+				cfg: cfg{mikrotik: mik, path: "/ip/dns/cache"},
+				All: cfg{mikrotik: mik, path: "/ip/dns/cache/all"},
+			},
+		},
+		Service: cmd{mikrotik: mik, path: "/ip/service"},
+		SSH: sshCMD{
+			cfg{mikrotik: mik, path: "/ip/ssh"},
+		},
+		Neighbor: neighborCMD{
+			cmd:               cmd{mikrotik: mik, path: "/ip/neighbor"},
+			DiscoverySettings: cmd{mikrotik: mik, path: "/ip/neighbor/discovery-settings"},
 		},
 	}
 
