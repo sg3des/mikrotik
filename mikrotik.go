@@ -20,13 +20,6 @@ type Mikrotik struct {
 	debug bool
 }
 
-type ppp struct {
-	AAA        cfg
-	L2tpSecret cmd
-	Profile    cmd
-	Secret     cmd
-}
-
 // ====================================
 //
 // Mikrotik Utilities
