@@ -520,3 +520,22 @@ type IPRoute struct {
 func (r IPRoute) String() string {
 	return fmt.Sprintf("%s %s %s %d %s", r.DstAddress, r.PrefSrc, r.Gateway, r.Distance, r.Comment)
 }
+
+// ====================================
+//
+// Arp
+//
+// ====================================
+
+type IPArp struct {
+	ID         string `mikrotik:".id"`
+	DHCP       bool   `mikrotik:"DHCP"`
+	Address    string `mikrotik:"address"`
+	Complete   bool   `mikrotik:"complete"`
+	Disabled   bool   `mikrotik:"disabled"`
+	Dynamic    bool   `mikrotik:"dynamic"`
+	Interface  string `mikrotik:"interface"`
+	Invalid    bool   `mikrotik:"invalid"`
+	MacAddress string `mikrotik:"mac-address"`
+	Published  bool   `mikrotik:"published"`
+}

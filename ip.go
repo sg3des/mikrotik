@@ -13,6 +13,7 @@ type ip struct {
 	Service    cmd
 	SSH        sshCMD
 	Neighbor   neighborCMD
+	Arp        cmd
 }
 
 // ====================================
@@ -199,9 +200,3 @@ type poolCMD struct {
 	cmd
 	Used cfg
 }
-
-// ====================================
-//
-// Route
-//
-// ====================================
