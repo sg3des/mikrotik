@@ -41,9 +41,3 @@ type PingResponse struct {
 	AvgRTT time.Duration `mikrotik:"avg-rtt"`
 	MaxRTT time.Duration `mikrotik:"max-rtt"`
 }
-
-type SystemNTPClient struct {
-	Enabled        string
-	ServerDNSNames string `mikrotik:"server-dns-names"`
-	Mode           string
-}

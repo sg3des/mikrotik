@@ -36,6 +36,18 @@ func (mik *Mikrotik) Close() {
 	mik.Conn.Close()
 }
 
+func (mik *Mikrotik) Delay(time string) error {
+	_, err := mik.RunArgs("/delay", "=delay-time="+time)
+
+	return err
+}
+
+func (mik *Mikrotik) Reboot() error {
+	_, err := mik.RunArgs("/system/reboot")
+
+	return err
+}
+
 // setMikrotikCommands sets the relative paths of the commands.
 func (mik *Mikrotik) setMikrotikCommands() {
 	mik.IP = ip{
@@ -103,6 +115,7 @@ func (mik *Mikrotik) setMikrotikCommands() {
 		NTP: ntp{
 			Client: cfg{mikrotik: mik, path: "/system/ntp/client"},
 		},
+		File: file{mikrotik: mik, path: "/file"},
 	}
 
 	mik.Interface = netinterface{
