@@ -11,6 +11,7 @@ import (
 //
 // ====================================
 
+// IPAddress is the struct for IP/Address*
 type IPAddress struct {
 	ID string `mikrotik:".id"`
 
@@ -34,6 +35,7 @@ type IPAddress struct {
 //
 // ====================================
 
+// IPCloud is the struct for IP/Cloud*
 type IPCloud struct {
 	DDNSEnabled        bool   `mikrotik:"ddns-enabled"`
 	DDNSUpdateInterval string `mikrotik:"ddns-update-interval"`
@@ -52,6 +54,7 @@ type IPCloud struct {
 //
 // ====================================
 
+// IPSSH is the struct for IP/SSH*
 type IPSSH struct {
 	AllowNoneCrypto          bool `mikrotik:"allow-none-crypto"`
 	AlwaysAllowPasswordLogin bool `mikrotik:"always-allow-password-login"`
@@ -66,6 +69,7 @@ type IPSSH struct {
 //
 // ====================================
 
+// IPService is the struct for IP/Service*
 type IPService struct {
 	ID          string `mikrotik:".id"`
 	Address     string `mikrotik:"address"`
@@ -84,6 +88,7 @@ type IPService struct {
 
 // Works both with Client and Server
 
+// IPDHCPOption is the struct for IP/DHCP-*/Option*
 type IPDHCPOption struct {
 	ID       string `mikrotik:".id"`
 	Code     string `mikrotik:"code"`
@@ -93,6 +98,7 @@ type IPDHCPOption struct {
 	Value    string `mikrotik:"value"`
 }
 
+// IPDHCPOptionSets is the struct for IP/DHCP-*/Option/Sets*
 type IPDHCPOptionSets struct {
 	ID      string `mikrotik:".id"`
 	Name    string `mikrotik:"name"`
@@ -105,6 +111,7 @@ type IPDHCPOptionSets struct {
 //
 // ====================================
 
+// IPDHCPClient is the struct for IP/DHCP-Client/*
 type IPDHCPClient struct {
 	ID string `mikrotik:".id"`
 
@@ -137,6 +144,7 @@ type IPDHCPClient struct {
 //
 // ====================================
 
+// IPDHCPServer is the struct for IP/DHCP-Server/*
 type IPDHCPServer struct {
 	ID                   string `mikrotik:".id"`
 	AddArp               bool   `mikrotik:"add-arp"`
@@ -164,6 +172,7 @@ type IPDHCPServer struct {
 	UseRadius            string `mikrotik:"use-radius"`
 }
 
+// IPDHCPServerLease is the struct for IP/DHCP-Server/Lease*
 type IPDHCPServerLease struct {
 	ID               string `mikrotik:".id"`
 	ActiveAddress    string `mikrotik:"active-address"`
@@ -195,6 +204,7 @@ type IPDHCPServerLease struct {
 	UseSrcMac        string `mikrotik:"use-src-mac"`
 }
 
+// IPDHCPServerNetwork is the struct for IP/DHCP-Server/Network*
 type IPDHCPServerNetwork struct {
 	ID            string `mikrotik:".id"`
 	BootFileName  string `mikrotik:"boot-file-name"`
@@ -214,10 +224,12 @@ type IPDHCPServerNetwork struct {
 	WinsServer    string `mikrotik:"wins-server"`
 }
 
+// IPDHCPServerConfig is the struct for IP/DHCP-Server/Config*
 type IPDHCPServerConfig struct {
 	StoreLeasesDisk string `mikrotik:"store-leases-disk"`
 }
 
+// IPDHCPServerAlert is the struct for IP/DHCP-Server/Alert*
 type IPDHCPServerAlert struct {
 	ID            string `mikrotik:".id"`
 	AlertTimeout  string `mikrotik:"alert-timeout"`
@@ -235,6 +247,7 @@ type IPDHCPServerAlert struct {
 //
 // ====================================
 
+// IPDNS is the struct for IP/DNS/*
 type IPDNS struct {
 	AllowRemoteRequests      bool   `mikrotik:"allow-remote-requests"`
 	CacheMaxTTL              string `mikrotik:"cache-max-ttl"`
@@ -249,6 +262,7 @@ type IPDNS struct {
 	Servers                  string `mikrotik:"servers"`
 }
 
+// IPDNSStatic is the struct for IP/DNS/Static*
 type IPDNSStatic struct {
 	ID       string `mikrotik:".id"`
 	Address  string `mikrotik:"address"`
@@ -259,6 +273,7 @@ type IPDNSStatic struct {
 	TTL      string `mikrotik:"ttl"`
 }
 
+// IPDNSCache is the struct for IP/DNS/Cache*
 type IPDNSCache struct {
 	ID      string `mikrotik:".id"`
 	Address string `mikrotik:"address"`
@@ -267,6 +282,7 @@ type IPDNSCache struct {
 	TTL     string `mikrotik:"ttl"`
 }
 
+// IPDNSCacheAll is the struct for IP/DNS/Cache/All*
 type IPDNSCacheAll struct {
 	ID     string `mikrotik:".id"`
 	Data   string `mikrotik:"data"`

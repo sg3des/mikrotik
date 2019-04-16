@@ -39,6 +39,7 @@ type Interface struct {
 //
 // ====================================
 
+// Bridge is the struct for Interface/Bridge/*
 type Bridge struct {
 	ID                string `mikrotik:".id"`
 	Name              string `mikrotik:"name"`
@@ -60,6 +61,7 @@ type Bridge struct {
 	VlanFiltering     string `mikrotik:"vlan-filtering"`
 }
 
+// BridgeSettings is the struct for Interface/Bridge/Settings/*
 type BridgeSettings struct {
 	AllowFastPath            bool `mikrotik:"allow-fast-path"`
 	BridgeFastForwardBytes   int  `mikrotik:"bridge-fast-forward-bytes"`
@@ -72,6 +74,7 @@ type BridgeSettings struct {
 	UseIPFirewallForVlan     bool `mikrotik:"use-ip-firewall-for-vlan"`
 }
 
+// BridgePort is the struct for Interface/Bridge/Port/*
 type BridgePort struct {
 	ID                    string `mikrotik:".id"`
 	Nextid                string `mikrotik:".nextid"`
@@ -119,6 +122,7 @@ type BridgePort struct {
 //
 // ====================================
 
+// Ethernet is the struct for Interface/Ethernet/Print
 type Ethernet struct {
 	ID                      string `mikrotik:".id"`
 	Advertise               string `mikrotik:"advertise"`
@@ -194,6 +198,7 @@ type Ethernet struct {
 //
 // ====================================
 
+// SSTPClient is the struct for Interface/sstp-client/Print
 type SSTPClient struct {
 	ID string `mikrotik:".id"`
 
@@ -220,6 +225,7 @@ type SSTPClient struct {
 	VerifyServerAddressFromCertificate bool   `mikrotik:"verify-server-address-from-certificate"`
 }
 
+// SSTPServer is the struct for Interface/sstp-server/server/*
 type SSTPServer struct {
 	ID   string `mikrotik:".id"`
 	Name string `mikrotik:"name"`
@@ -249,12 +255,14 @@ type SSTPServer struct {
 //
 // ====================================
 
+// List is the struct for Interface/List/*
 type List struct {
 	Name    string `mikrotik:"name"`
 	Include string `mikrotik:"include"`
 	Exclude string `mikrotik:"exclude"`
 }
 
+// ListMember is the struct for Interface/List/Member*
 type ListMember struct {
 	Interface string `mikrotik:"interface"`
 	List      string `mikrotik:"list"`
@@ -266,6 +274,7 @@ type ListMember struct {
 //
 // ====================================
 
+// PPPOEClient is the struct for Interface/pppoe-client/*
 type PPPOEClient struct {
 	ACMAC                string `mikrotik:"ac-mac"`
 	ACName               string `mikrotik:"ac-name"`
@@ -300,6 +309,7 @@ type PPPOEClient struct {
 //
 // ====================================
 
+// WirelessInterface is the struct for Interface/Wireless/*
 type WirelessInterface struct {
 	ID                       string `mikrotik:".id"`
 	DefaultName              string `mikrotik:"default-name"`
@@ -387,6 +397,7 @@ type WirelessInterface struct {
 	Disabled                 bool   `mikrotik:"disabled"`
 }
 
+// WirelessAP is the struct for Interface/Wireless/AP/*
 type WirelessAP struct {
 	Address         string
 	SSID            string `mikrotik:"ssid"`
@@ -399,6 +410,7 @@ type WirelessAP struct {
 	Section         int
 }
 
+// WirelessSecurityProfile is the struct for Interface/Wireless/Security/Profile*
 type WirelessSecurityProfile struct {
 	ID      string `mikrotik:".id"`
 	Name    string

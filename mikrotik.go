@@ -106,7 +106,7 @@ func (mik *Mikrotik) setMikrotikCommands() {
 				mikrotik: mik,
 				path:     "/interface/sstp-client",
 			},
-			Server: cfg{mikrotik: mik, path: "/interface/sstp-client/server"},
+			Server: cfg{mikrotik: mik, path: "/interface/sstp-server/server"},
 		},
 		PPPOEClient: cmd{mikrotik: mik, path: "/interface/pppoe-client"},
 		Ethernet:    cmd{mikrotik: mik, path: "/interface/ethernet"},

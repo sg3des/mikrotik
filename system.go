@@ -79,7 +79,7 @@ type ntp struct {
 //
 // ====================================
 
-type Leds struct {
+type leds struct {
 	cmd
 	Settings cfg
 }
@@ -90,12 +90,12 @@ type Leds struct {
 //
 // ====================================
 
-type User struct {
+type usser struct {
 	cmd
 	SSHKeys sshkeys
 }
 
 type sshkeys struct {
-	SSHCmds
-	Private SSHCmds
+	sshcmds
+	Private sshcmds
 }

@@ -34,7 +34,7 @@ func (mik *Mikrotik) RunArgs(cmd string, args ...string) (*routeros.Reply, error
 	return re, err
 }
 
-//RunMarshal - run command and marhsal response to interface struct
+//RunMarshal - run command and marshal response to interface struct
 func (mik *Mikrotik) RunMarshal(cmd string, v interface{}) error {
 	re, err := mik.Run(cmd)
 	if err != nil {
@@ -44,6 +44,7 @@ func (mik *Mikrotik) RunMarshal(cmd string, v interface{}) error {
 	return mik.ParseResponce(re, v)
 }
 
+// ParseResponce - Parse the mikrotik's reply into the interface using reflect.
 func (mik *Mikrotik) ParseResponce(re *routeros.Reply, v interface{}) error {
 	for _, resp := range re.Re {
 		if mik.debug {
@@ -211,15 +212,18 @@ func (c *cmd) Comment(id, comment string) error {
 //
 // ===============================
 
+// The cfg struct represents the basic commands for configurations that use only Print and Set. 
 type cfg struct {
 	mikrotik *Mikrotik
 	path     string
 }
 
+// Print simply calls the mikrotik's Print for the commands that use cfg struct. 
 func (c *cfg) Print(v interface{}) error {
 	return c.mikrotik.Print(c.path+"/print", v)
 }
 
+//Set value of item by id
 func (c *cfg) Set(name, value string) error {
 	return c.mikrotik.SetOne(c.path+"/set", name, value)
 }
@@ -230,20 +234,24 @@ func (c *cfg) Set(name, value string) error {
 //
 // ===============================
 
-type SSHCmds struct {
+// The struct sshcmds includes all the methods for the SSH keys managed in System/User
+type sshcmds struct {
 	mikrotik *Mikrotik
 	path     string
 }
 
-func (ssh *SSHCmds) Print(v interface{}) error {
+// Print simply calls the mikrotik's Print for the commands that use sshcmd struct. 
+func (ssh *sshcmds) Print(v interface{}) error {
 	return ssh.mikrotik.Print(ssh.path+"/print", v)
 }
 
-func (ssh *SSHCmds) Remove(id string) error {
+//Remove item by id
+func (ssh *sshcmds) Remove(id string) error {
 	return ssh.mikrotik.Remove(ssh.path+"/remove", id)
 }
 
-func (ssh *SSHCmds) Find(where string, v interface{}) error {
+// Find runs a print using the where argument searching for a precise attribute.
+func (ssh *sshcmds) Find(where string, v interface{}) error {
 	re, err := ssh.mikrotik.RunArgs(ssh.path+"/print", "?"+where)
 	if err != nil {
 		return err
@@ -252,7 +260,8 @@ func (ssh *SSHCmds) Find(where string, v interface{}) error {
 	return ssh.mikrotik.ParseResponce(re, v)
 }
 
-func (ssh *SSHCmds) Import(user, keyfile string) error {
+// Import imports the specified SSH key into the specified user 
+func (ssh *sshcmds) Import(user, keyfile string) error {
 	_, err := ssh.mikrotik.RunArgs(ssh.path+"/import", "=public-key-file="+keyfile, "=user="+user)
 
 	return err
