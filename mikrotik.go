@@ -26,27 +26,6 @@ type Mikrotik struct {
 //
 // ====================================
 
-// Debug activates the debug mode on the library
-func (mik *Mikrotik) Debug(debug bool) {
-	mik.debug = debug
-}
-
-// Close closes the connection with the Mikrotik
-func (mik *Mikrotik) Close() {
-	mik.Conn.Close()
-}
-
-func (mik *Mikrotik) Delay(time string) error {
-	_, err := mik.RunArgs("/delay", "=delay-time="+time)
-
-	return err
-}
-
-func (mik *Mikrotik) Reboot() error {
-	_, err := mik.RunArgs("/system/reboot")
-
-	return err
-}
 
 // setMikrotikCommands sets the relative paths of the commands.
 func (mik *Mikrotik) setMikrotikCommands() {
