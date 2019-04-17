@@ -1,13 +1,17 @@
 package mikrotik
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+
+	routeros "gopkg.in/routeros.v2"
+)
 
 // ===============================
 //
 // Mikrotik CMDs
 //
 // ===============================
-
 
 //Run one line command on mikrotik by api
 func (mik *Mikrotik) Run(cmd string) (*routeros.Reply, error) {
@@ -151,7 +155,7 @@ type cmd struct {
 	path     string
 }
 
-// Print simply calls the mikrotik's Print for the commands that use cmd struct. 
+// Print simply calls the mikrotik's Print for the commands that use cmd struct.
 func (c *cmd) Print(v interface{}) error {
 	return c.mikrotik.Print(c.path+"/print", v)
 }
@@ -212,13 +216,13 @@ func (c *cmd) Comment(id, comment string) error {
 //
 // ===============================
 
-// The cfg struct represents the basic commands for configurations that use only Print and Set. 
+// The cfg struct represents the basic commands for configurations that use only Print and Set.
 type cfg struct {
 	mikrotik *Mikrotik
 	path     string
 }
 
-// Print simply calls the mikrotik's Print for the commands that use cfg struct. 
+// Print simply calls the mikrotik's Print for the commands that use cfg struct.
 func (c *cfg) Print(v interface{}) error {
 	return c.mikrotik.Print(c.path+"/print", v)
 }
@@ -240,7 +244,7 @@ type sshcmds struct {
 	path     string
 }
 
-// Print simply calls the mikrotik's Print for the commands that use sshcmd struct. 
+// Print simply calls the mikrotik's Print for the commands that use sshcmd struct.
 func (ssh *sshcmds) Print(v interface{}) error {
 	return ssh.mikrotik.Print(ssh.path+"/print", v)
 }
@@ -260,7 +264,7 @@ func (ssh *sshcmds) Find(where string, v interface{}) error {
 	return ssh.mikrotik.ParseResponce(re, v)
 }
 
-// Import imports the specified SSH key into the specified user 
+// Import imports the specified SSH key into the specified user
 func (ssh *sshcmds) Import(user, keyfile string) error {
 	_, err := ssh.mikrotik.RunArgs(ssh.path+"/import", "=public-key-file="+keyfile, "=user="+user)
 

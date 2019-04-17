@@ -90,12 +90,76 @@ type leds struct {
 //
 // ====================================
 
-type usser struct {
+type user struct {
 	cmd
 	SSHKeys sshkeys
+	AAA     cfg
+	Active  cfg
+	Group   cmd
 }
 
 type sshkeys struct {
 	sshcmds
 	Private sshcmds
+}
+
+// ====================================
+//
+// Logging
+//
+// ====================================
+
+type logging struct {
+	cmd
+	Action cmd
+}
+
+// ====================================
+//
+// Resource
+//
+// ====================================
+
+type resource struct {
+	USB cfg
+	CPU cfg
+	IRQ cfg
+	PCI respci
+}
+
+type respci struct {
+	cfg
+}
+
+// USBPowerReset to implement
+
+// ====================================
+//
+// Resource
+//
+// ====================================
+
+type sysresource struct {
+	mikrotik   *Mikrotik
+	path       string
+	Settings   cfg
+	ModeButton cfg
+	USB        usbcfg
+}
+
+type usbcfg struct {
+	cfg
+}
+
+// PowerReset wants duration and bus in order to stop the power to the USB (bus) for an amount of time (duration). Default: Duration= 3s and Bus = 1.
+func (usb *usbcfg) PowerReset(duration, bus string) error {
+	if duration == "" {
+		duration = "3s"
+	} else if bus == "" {
+		bus = "1"
+	}
+
+	_, err := usb.cfg.mikrotik.RunArgs(usb.path+"/power-reset", "=duration="+duration, "=bus="+bus)
+
+	return err
 }

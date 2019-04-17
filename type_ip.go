@@ -555,3 +555,4 @@ type IPArp struct {
 	MacAddress string `mikrotik:"mac-address"`
 	Published  bool   `mikrotik:"published"`
 }
+

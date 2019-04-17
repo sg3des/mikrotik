@@ -1,7 +1,6 @@
 package mikrotik
 
 import (
-	"log"
 	"time"
 
 	routeros "gopkg.in/routeros.v2"
@@ -32,4 +31,3 @@ func DialTimeout(addr, user, pass string, timeout time.Duration) (*Mikrotik, err
 
 	return mik, nil
 }
-
