@@ -143,6 +143,13 @@ func (mik *Mikrotik) Reboot() error {
 	return err
 }
 
+// Upgrade upgrades the mikrotik
+func (mik *Mikrotik) Upgrade() error {
+	_, err := mik.RunArgs("/system/routerboard/upgrade")
+
+	return err
+}
+
 // ===============================
 //
 // Basic CMDs
