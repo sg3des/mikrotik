@@ -122,7 +122,7 @@ func (mik *Mikrotik) setMikrotikCommands() {
 				path:     "/interface/bridge",
 			},
 			Settings: cfg{mikrotik: mik, path: "/interface/bridge/settings"},
-			Port:     cmd{mikrotik: mik, path: "/interface/bridge/ports"},
+			Port:     cmd{mikrotik: mik, path: "/interface/bridge/port"},
 		},
 		VLAN: cmd{mikrotik: mik, path: "/interface/vlan"},
 		Wireless: wireless{
