@@ -458,3 +458,30 @@ const (
 	WirelessSecurityMode_StaticKeysRequired = "static-keys-required"
 	WirelessSecurityMode_StaticKeysOptional = "static-keys-optional"
 )
+
+// ====================================
+//
+// VLANs
+//
+// ====================================
+
+// Structure for /interface/vlan/print
+
+type VLANPrint struct {
+	ID                      string `json:".id"`
+	Arp                     string `json:"arp"`
+	ArpTimeout              string `json:"arp-timeout"`
+	Disabled                bool   `json:"disabled"`
+	Interface               string `json:"interface"`
+	L2Mtu                   int    `json:"l2mtu"`
+	LoopProtect             string `json:"loop-protect"`
+	LoopProtectDisableTime  string `json:"loop-protect-disable-time"`
+	LoopProtectSendInterval string `json:"loop-protect-send-interval"`
+	LoopProtectStatus       string `json:"loop-protect-status"`
+	MacAddress              string `json:"mac-address"`
+	Mtu                     int    `json:"mtu"`
+	Name                    string `json:"name"`
+	Running                 bool   `json:"running"`
+	UseServiceTag           bool   `json:"use-service-tag"`
+	VlanID                  int    `json:"vlan-id"`
+}

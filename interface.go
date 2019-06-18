@@ -11,6 +11,7 @@ type netinterface struct {
 	List        netlist
 	Bridge      netbridge
 	PPPOEClient cmd
+	VLAN        cmd
 
 	Wireless wireless
 }

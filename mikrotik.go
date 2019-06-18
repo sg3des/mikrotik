@@ -26,7 +26,6 @@ type Mikrotik struct {
 //
 // ====================================
 
-
 // setMikrotikCommands sets the relative paths of the commands.
 func (mik *Mikrotik) setMikrotikCommands() {
 	mik.IP = ip{
@@ -125,6 +124,7 @@ func (mik *Mikrotik) setMikrotikCommands() {
 			Settings: cfg{mikrotik: mik, path: "/interface/bridge/settings"},
 			Port:     cmd{mikrotik: mik, path: "/interface/bridge/ports"},
 		},
+		VLAN: cmd{mikrotik: mik, path: "/interface/vlan"},
 		Wireless: wireless{
 			cmd: cmd{
 				mikrotik: mik,
