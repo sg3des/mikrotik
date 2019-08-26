@@ -68,6 +68,8 @@ func (mik *Mikrotik) setMikrotikCommands() {
 	}
 
 	mik.System = system{
+		mikrotik: mik,
+		path:     "/system",
 		Identity: identity{mikrotik: mik, path: "/system/identity"},
 		NTP: ntp{
 			Client: cfg{mikrotik: mik, path: "/system/ntp/client"},
@@ -291,9 +293,17 @@ func (c *cmd) Comment(id, comment string) error {
 }
 
 type system struct {
+	mikrotik *Mikrotik
+	path     string
+
 	Identity identity
 	NTP      ntp
 }
+
+func (s *system) Routerboard(v interface{}) error {
+	return s.mikrotik.Print(s.path+"/routerboard/print", v)
+}
+
 type ntp struct {
 	Client cfg
 }

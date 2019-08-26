@@ -432,3 +432,15 @@ const (
 	PPPServicePPTP  = "pptp"
 	PPPServiceSSTP  = "sstp"
 )
+
+// Routerboard - information from /system/routerboard/print
+type Routerboard struct {
+	Routerboard     bool
+	BoardName       string `mikrotik:"board-name"`
+	Model           string
+	SerialNumber    string `mikrotik:"serial-number"`
+	FirmwareType    string `mikrotik:"firmware-type"`
+	FactoryFirmware string `mikrotik:"factory-firmware"`
+	CurrentFirmware string `mikrotik:"current-firmware"`
+	UpgradeFirmware string `mikrotik:"upgrade-firmware"`
+}
