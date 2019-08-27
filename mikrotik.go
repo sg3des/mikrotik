@@ -3,10 +3,10 @@ package mikrotik
 import (
 	"errors"
 	"fmt"
-	"log"
 	"sync"
 	"time"
 
+	log "github.com/sirupsen/logrus"
 	routeros "gopkg.in/routeros.v2"
 )
 
@@ -129,10 +129,13 @@ func (mik *Mikrotik) Run(cmd string) (*routeros.Reply, error) {
 	mik.connMutex.Lock()
 	defer mik.connMutex.Unlock()
 
+	log.Tracef("[Run] %v", cmd)
 	re, err := mik.Conn.Run(cmd)
+	log.Tracef("[RunArgs](reply) %+v", re)
 	if err != nil {
 		mik.Conn.Run("")
 	}
+
 	return re, err
 }
 
@@ -140,9 +143,11 @@ func (mik *Mikrotik) Run(cmd string) (*routeros.Reply, error) {
 func (mik *Mikrotik) RunArgs(cmd string, args ...string) (*routeros.Reply, error) {
 	mik.connMutex.Lock()
 	defer mik.connMutex.Unlock()
+	toRun := append([]string{cmd}, args...)
+	log.Tracef("[RunArgs] %v", toRun)
+	re, err := mik.Conn.RunArgs(toRun)
 
-	re, err := mik.Conn.RunArgs(append([]string{cmd}, args...))
-
+	log.Tracef("[RunArgs](reply) %+v", re)
 	if err != nil {
 		mik.Conn.Run("")
 	}

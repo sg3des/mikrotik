@@ -1,8 +1,9 @@
 package mikrotik
 
 import (
-	"log"
 	"testing"
+
+	log "github.com/sirupsen/logrus"
 )
 
 var mikrotik *Mikrotik
