@@ -88,6 +88,10 @@ func (mik *Mikrotik) setMikrotikCommands() {
 			},
 			SecurityProfiles: cmd{mikrotik: mik, path: "/interface/wireless/security-profiles"},
 		},
+		Lte: lte{
+			mikrotik: mik,
+			path:     "/interface/lte",
+		},
 	}
 
 	mik.PPP = ppp{
@@ -346,6 +350,7 @@ type netinterface struct {
 	SSTPClient cmd
 	SSTPServer cmd
 	Wireless   wireless
+	Lte        lte
 }
 
 func (c *netinterface) List(v interface{}) error {
@@ -428,6 +433,16 @@ func (c *wireless) contains(list []*WirelessAP, ap *WirelessAP) bool {
 		}
 	}
 	return false
+}
+
+type lte struct {
+	mikrotik *Mikrotik
+	path     string
+}
+
+func (l *lte) Set(id string, v interface{}) error {
+	path := l.path
+	return l.mikrotik.Set(path+"/set", id, v)
 }
 
 type ppp struct {
