@@ -131,7 +131,7 @@ func (mik *Mikrotik) Run(cmd string) (*routeros.Reply, error) {
 
 	log.Tracef("[Run] %v", cmd)
 	re, err := mik.Conn.Run(cmd)
-	log.Tracef("[RunArgs](reply) %+v", re)
+	log.Tracef("[Run](reply) %+v", re)
 	if err != nil {
 		mik.Conn.Run("")
 	}
@@ -167,7 +167,7 @@ func (mik *Mikrotik) RunMarshal(cmd string, v interface{}) error {
 func (mik *Mikrotik) ParseResponce(re *routeros.Reply, v interface{}) error {
 	for _, resp := range re.Re {
 		if mik.debug {
-			log.Println(resp)
+			log.Debug(resp)
 		}
 
 		if err := ValuesFrom(resp.Map).To(v); err != nil {
@@ -448,6 +448,20 @@ type lte struct {
 func (l *lte) Set(id string, v interface{}) error {
 	path := l.path
 	return l.mikrotik.Set(path+"/set", id, v)
+}
+
+func (l *lte) InfoOnce(id string, lteInfo *LteInfo) error {
+	res, err := l.mikrotik.RunArgs(l.path+"/info", "=.id="+id, "=once=")
+	if err != nil {
+		return err
+	}
+
+	err = l.mikrotik.ParseResponce(res, lteInfo)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 type ppp struct {

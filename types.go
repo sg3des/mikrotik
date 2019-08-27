@@ -444,3 +444,31 @@ type Routerboard struct {
 	CurrentFirmware string `mikrotik:"current-firmware"`
 	UpgradeFirmware string `mikrotik:"upgrade-firmware"`
 }
+
+type LteInfo struct {
+	// this data was sent without pin
+	PinStatus     string `mikrotik:"pin-status"`
+	Functionality string
+	Manufacturer  string
+	Model         string
+	Revision      string
+	IMEI          string `mikrotik:"imei"`
+
+	// this data was empty withut pin and was sent with correct pin set.
+	RegistrationStatus string `mikrotik:"registration-status"`
+	CurrentOperator    string `mikrotik:"current-operator"`
+	Lac                string
+	CurrentCellID      string `mikrotik:"current-cellid"`
+	EnbID              string `mikrotik:"enb-id"`
+	SectorID           string `mikrotik:"sector-id"`
+	PhyCellID          string `mikrotik:"phy-cellid"`
+	AccessTechnology   string `mikrotik:"access-technology"`
+	SessionUptime      string `mikrotik:"session-uptime"`
+	IMSI               string `mikrotik:"imsi"`
+	UICC               string `mikrotik:"uicc"`
+	SubscriberNumber   string `mikrotik:"subscriber-number"`
+	Earfcn             string
+	Rsrp               int
+	Rsrq               string
+	Sinr               int
+}
