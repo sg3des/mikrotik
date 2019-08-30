@@ -472,3 +472,6 @@ type LteInfo struct {
 	Rsrq               string
 	Sinr               int
 }
+
+type LtePrint struct {
+}

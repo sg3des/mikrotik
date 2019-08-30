@@ -371,6 +371,17 @@ func (c *netinterface) Find(where string, v interface{}) error {
 	return c.mikrotik.ParseResponce(re, v)
 }
 
+func (c *netinterface) FindOne(id string, v interface{}) error {
+	re, err := c.mikrotik.RunArgs(c.path+"/print", "=.id="+id)
+	if err != nil {
+		return err
+	}
+
+	log.Debugf("[FindOne] %v", re)
+
+	return c.mikrotik.ParseResponce(re, v)
+}
+
 // func (c *netinterface) GetByName(name string, v interface{}) error {
 // 	re, err := c.mikrotik.RunArgs(c.path+"/print", "?name="+name)
 // 	if err != nil {
