@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
+	routeros "github.com/go-routeros/routeros"
 	log "github.com/sirupsen/logrus"
-	routeros "gopkg.in/routeros.v2"
 )
 
 //Dial to mikrotik router
@@ -25,7 +25,8 @@ func Dial(addr, user, pass string) (*Mikrotik, error) {
 
 //DialTimeout dial to mikrotik router with timeout
 func DialTimeout(addr, user, pass string, timeout time.Duration) (*Mikrotik, error) {
-	c, err := routeros.DialTimeout(addr, user, pass, timeout)
+	//FIXME -- master don't have DialTimeout v.2 has but don't login on newst mikrotik
+	c, err := routeros.Dial(addr, user, pass)
 	if err != nil {
 		return nil, err
 	}
@@ -367,17 +368,6 @@ func (c *netinterface) Find(where string, v interface{}) error {
 	if err != nil {
 		return err
 	}
-
-	return c.mikrotik.ParseResponce(re, v)
-}
-
-func (c *netinterface) FindOne(id string, v interface{}) error {
-	re, err := c.mikrotik.RunArgs(c.path+"/print", "=.id="+id)
-	if err != nil {
-		return err
-	}
-
-	log.Debugf("[FindOne] %v", re)
 
 	return c.mikrotik.ParseResponce(re, v)
 }
