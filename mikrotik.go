@@ -464,6 +464,10 @@ func (l *lte) InfoOnce(id string, lteInfo *LteInfo) error {
 	return nil
 }
 
+func (l *lte) List(v interface{}) error {
+	return l.mikrotik.Print(l.path+"/print", v)
+}
+
 type ppp struct {
 	AAA        cfg
 	L2tpSecret cmd

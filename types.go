@@ -474,4 +474,14 @@ type LteInfo struct {
 }
 
 type LtePrint struct {
+	ID           string `mikrotik:".id"`
+	Name         string
+	Mtu          int
+	MacAddress   string `mikrotik:"mac-address"`
+	Pin          string
+	ApnProfiles  string `mikrotik:"apn-profiles"`
+	AllowRoaming bool   `mikrotik:"allow-roaming"`
+	NetworkMode  string `mikrotik:"network-mode"`
+	Running      bool
+	Disalbed     bool
 }
