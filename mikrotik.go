@@ -74,6 +74,8 @@ func (mik *Mikrotik) setMikrotikCommands() {
 		NTP: ntp{
 			Client: cfg{mikrotik: mik, path: "/system/ntp/client"},
 		},
+		Routerboard: printable{mikrotik: mik, path: "/system/routerboard"},
+		Resource:    printable{mikrotik: mik, path: "/system/resource"},
 	}
 
 	mik.Interface = netinterface{
@@ -250,6 +252,16 @@ type firewall struct {
 	Mangle cmd
 }
 
+// printable allow ony print a struct
+type printable struct {
+	mikrotik *Mikrotik
+	path     string
+}
+
+func (p *printable) Print(v interface{}) error {
+	return p.mikrotik.Print(p.path+"/print", v)
+}
+
 type cmd struct {
 	mikrotik *Mikrotik
 	path     string
@@ -305,12 +317,10 @@ type system struct {
 	mikrotik *Mikrotik
 	path     string
 
-	Identity identity
-	NTP      ntp
-}
-
-func (s *system) Routerboard(v interface{}) error {
-	return s.mikrotik.Print(s.path+"/routerboard/print", v)
+	Identity    identity
+	NTP         ntp
+	Routerboard printable
+	Resource    printable
 }
 
 type ntp struct {
