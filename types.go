@@ -490,17 +490,17 @@ type LtePrint struct {
 type Resource struct {
 	Uptime               string
 	BuildTime            string `mikrotik:"build-time"`
-	FreeMemory           string `mikrotik:"free-memory"`
-	TotalMemory          string `mikrotik:"total-memory"`
+	FreeMemory           int    `mikrotik:"free-memory"`
+	TotalMemory          int    `mikrotik:"total-memory"`
 	CPU                  string `mikrotik:"cpu"`
 	CPUCount             int    `mikrotik:"cpu-count"`
-	CPUFrequency         string `mikrotik:"cpu-frequency"`
-	CPULoad              string `mikrotik:"cpu-load"`
-	FreeHddSpace         string `mikrotik:"free-hdd-space"`
-	TotalHddSpace        string `mikrotik:"total-hdd-space"`
+	CPUFrequency         int    `mikrotik:"cpu-frequency"` // MHZ
+	CPULoad              int    `mikrotik:"cpu-load"`      // %
+	FreeHddSpace         int    `mikrotik:"free-hdd-space"`
+	TotalHddSpace        int    `mikrotik:"total-hdd-space"`
 	WriteSectSinceReboot int    `mikrotik:"write-sect-since-reboot"`
 	WriteSectTotal       int    `mikrotik:"write-sect-total"`
-	BadBlocks            string `mikrotik:"bad-blocks"`
+	BadBlocks            string `mikrotik:"bad-blocks"` // %
 	ArchitectureName     string `mikrotik:"architecture-name"`
 	BoardName            string `mikrotik:"board-name"`
 	Platform             string `mikrotik:"platform"`
