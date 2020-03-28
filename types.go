@@ -488,7 +488,7 @@ type LtePrint struct {
 
 //Resource from `/system resource print`
 type Resource struct {
-	Uptime               string
+	Uptime               string `mikrotik:"uptime"`
 	BuildTime            string `mikrotik:"build-time"`
 	FreeMemory           int    `mikrotik:"free-memory"`
 	TotalMemory          int    `mikrotik:"total-memory"`
