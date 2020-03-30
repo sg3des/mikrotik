@@ -468,9 +468,10 @@ type LteInfo struct {
 	UICC               string `mikrotik:"uicc"`
 	SubscriberNumber   string `mikrotik:"subscriber-number"`
 	Earfcn             string
-	Rsrp               int
-	Rsrq               string
-	Sinr               int
+	Rssi               string // should be float
+	Rsrp               string // should be float
+	Rsrq               string // should be float
+	Sinr               string // should be float
 }
 
 type LtePrint struct {
