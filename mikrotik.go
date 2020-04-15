@@ -3,10 +3,10 @@ package mikrotik
 import (
 	"errors"
 	"fmt"
-	"log"
 	"sync"
 	"time"
 
+	log "github.com/sirupsen/logrus"
 	routeros "gopkg.in/routeros.v2"
 )
 
@@ -68,10 +68,14 @@ func (mik *Mikrotik) setMikrotikCommands() {
 	}
 
 	mik.System = system{
+		mikrotik: mik,
+		path:     "/system",
 		Identity: identity{mikrotik: mik, path: "/system/identity"},
 		NTP: ntp{
 			Client: cfg{mikrotik: mik, path: "/system/ntp/client"},
 		},
+		Routerboard: printable{mikrotik: mik, path: "/system/routerboard"},
+		Resource:    printable{mikrotik: mik, path: "/system/resource"},
 	}
 
 	mik.Interface = netinterface{
@@ -85,6 +89,10 @@ func (mik *Mikrotik) setMikrotikCommands() {
 				path:     "/interface/wireless",
 			},
 			SecurityProfiles: cmd{mikrotik: mik, path: "/interface/wireless/security-profiles"},
+		},
+		Lte: lte{
+			mikrotik: mik,
+			path:     "/interface/lte",
 		},
 	}
 
@@ -123,10 +131,13 @@ func (mik *Mikrotik) Run(cmd string) (*routeros.Reply, error) {
 	mik.connMutex.Lock()
 	defer mik.connMutex.Unlock()
 
+	log.Tracef("[Run] %v", cmd)
 	re, err := mik.Conn.Run(cmd)
+	log.Tracef("[Run](reply) %+v", re)
 	if err != nil {
 		mik.Conn.Run("")
 	}
+
 	return re, err
 }
 
@@ -134,9 +145,11 @@ func (mik *Mikrotik) Run(cmd string) (*routeros.Reply, error) {
 func (mik *Mikrotik) RunArgs(cmd string, args ...string) (*routeros.Reply, error) {
 	mik.connMutex.Lock()
 	defer mik.connMutex.Unlock()
+	toRun := append([]string{cmd}, args...)
+	log.Tracef("[RunArgs] %v", toRun)
+	re, err := mik.Conn.RunArgs(toRun)
 
-	re, err := mik.Conn.RunArgs(append([]string{cmd}, args...))
-
+	log.Tracef("[RunArgs](reply) %+v", re)
 	if err != nil {
 		mik.Conn.Run("")
 	}
@@ -156,7 +169,7 @@ func (mik *Mikrotik) RunMarshal(cmd string, v interface{}) error {
 func (mik *Mikrotik) ParseResponce(re *routeros.Reply, v interface{}) error {
 	for _, resp := range re.Re {
 		if mik.debug {
-			log.Println(resp)
+			log.Debug(resp)
 		}
 
 		if err := ValuesFrom(resp.Map).To(v); err != nil {
@@ -239,6 +252,16 @@ type firewall struct {
 	Mangle cmd
 }
 
+// printable allow ony print a struct
+type printable struct {
+	mikrotik *Mikrotik
+	path     string
+}
+
+func (p *printable) Print(v interface{}) error {
+	return p.mikrotik.Print(p.path+"/print", v)
+}
+
 type cmd struct {
 	mikrotik *Mikrotik
 	path     string
@@ -291,9 +314,15 @@ func (c *cmd) Comment(id, comment string) error {
 }
 
 type system struct {
-	Identity identity
-	NTP      ntp
+	mikrotik *Mikrotik
+	path     string
+
+	Identity    identity
+	NTP         ntp
+	Routerboard printable
+	Resource    printable
 }
+
 type ntp struct {
 	Client cfg
 }
@@ -336,6 +365,7 @@ type netinterface struct {
 	SSTPClient cmd
 	SSTPServer cmd
 	Wireless   wireless
+	Lte        lte
 }
 
 func (c *netinterface) List(v interface{}) error {
@@ -418,6 +448,34 @@ func (c *wireless) contains(list []*WirelessAP, ap *WirelessAP) bool {
 		}
 	}
 	return false
+}
+
+type lte struct {
+	mikrotik *Mikrotik
+	path     string
+}
+
+func (l *lte) Set(id string, v interface{}) error {
+	path := l.path
+	return l.mikrotik.Set(path+"/set", id, v)
+}
+
+func (l *lte) InfoOnce(id string, lteInfo *LteInfo) error {
+	res, err := l.mikrotik.RunArgs(l.path+"/info", "=.id="+id, "=once=")
+	if err != nil {
+		return err
+	}
+
+	err = l.mikrotik.ParseResponce(res, lteInfo)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (l *lte) List(v interface{}) error {
+	return l.mikrotik.Print(l.path+"/print", v)
 }
 
 type ppp struct {

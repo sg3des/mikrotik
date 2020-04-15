@@ -432,3 +432,77 @@ const (
 	PPPServicePPTP  = "pptp"
 	PPPServiceSSTP  = "sstp"
 )
+
+// Routerboard - information from /system/routerboard/print
+type Routerboard struct {
+	Routerboard     bool
+	BoardName       string `mikrotik:"board-name"`
+	Model           string
+	SerialNumber    string `mikrotik:"serial-number"`
+	FirmwareType    string `mikrotik:"firmware-type"`
+	FactoryFirmware string `mikrotik:"factory-firmware"`
+	CurrentFirmware string `mikrotik:"current-firmware"`
+	UpgradeFirmware string `mikrotik:"upgrade-firmware"`
+}
+
+type LteInfo struct {
+	// this data was sent without pin
+	PinStatus     string `mikrotik:"pin-status"`
+	Functionality string
+	Manufacturer  string
+	Model         string
+	Revision      string
+	IMEI          string `mikrotik:"imei"`
+
+	// this data was empty withut pin and was sent with correct pin set.
+	RegistrationStatus string `mikrotik:"registration-status"`
+	CurrentOperator    string `mikrotik:"current-operator"`
+	Lac                string
+	CurrentCellID      string `mikrotik:"current-cellid"`
+	EnbID              string `mikrotik:"enb-id"`
+	SectorID           string `mikrotik:"sector-id"`
+	PhyCellID          string `mikrotik:"phy-cellid"`
+	AccessTechnology   string `mikrotik:"access-technology"`
+	SessionUptime      string `mikrotik:"session-uptime"`
+	IMSI               string `mikrotik:"imsi"`
+	UICC               string `mikrotik:"uicc"`
+	SubscriberNumber   string `mikrotik:"subscriber-number"`
+	Earfcn             string
+	Rssi               string // should be float
+	Rsrp               string // should be float
+	Rsrq               string // should be float
+	Sinr               string // should be float
+}
+
+type LtePrint struct {
+	ID           string `mikrotik:".id"`
+	Name         string
+	Mtu          int
+	MacAddress   string `mikrotik:"mac-address"`
+	Pin          string
+	ApnProfiles  string `mikrotik:"apn-profiles"`
+	AllowRoaming bool   `mikrotik:"allow-roaming"`
+	NetworkMode  string `mikrotik:"network-mode"`
+	Running      bool
+	Disalbed     bool
+}
+
+//Resource from `/system resource print`
+type Resource struct {
+	Uptime               string `mikrotik:"uptime"`
+	BuildTime            string `mikrotik:"build-time"`
+	FreeMemory           int    `mikrotik:"free-memory"`
+	TotalMemory          int    `mikrotik:"total-memory"`
+	CPU                  string `mikrotik:"cpu"`
+	CPUCount             int    `mikrotik:"cpu-count"`
+	CPUFrequency         int    `mikrotik:"cpu-frequency"` // MHZ
+	CPULoad              int    `mikrotik:"cpu-load"`      // %
+	FreeHddSpace         int    `mikrotik:"free-hdd-space"`
+	TotalHddSpace        int    `mikrotik:"total-hdd-space"`
+	WriteSectSinceReboot int    `mikrotik:"write-sect-since-reboot"`
+	WriteSectTotal       int    `mikrotik:"write-sect-total"`
+	BadBlocks            string `mikrotik:"bad-blocks"` // %
+	ArchitectureName     string `mikrotik:"architecture-name"`
+	BoardName            string `mikrotik:"board-name"`
+	Platform             string `mikrotik:"platform"`
+}
