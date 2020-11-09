@@ -44,7 +44,7 @@ type PingResponse struct {
 	MaxRTT time.Duration `mikrotik:"max-rtt"`
 }
 
-//IPAddress /ip/address
+// IPAddress /ip/address
 type IPAddress struct {
 	ID string `mikrotik:".id"`
 
@@ -63,7 +63,7 @@ func (ipa IPAddress) String() string {
 	return fmt.Sprintf("%s dev %s", ipa.Address, ipa.Interface)
 }
 
-//Route /ip/route
+// Route /ip/route
 type Route struct {
 	ID string `mikrotik:".id"`
 
@@ -88,7 +88,7 @@ func (r Route) String() string {
 	return fmt.Sprintf("%s %s %s %d %s", r.DstAddress, r.PrefSrc, r.Gateway, r.Distance, r.Comment)
 }
 
-//NATRule /ip/firewall/nat
+// NATRule /ip/firewall/nat
 type NATRule struct {
 	ID string `mikrotik:".id"`
 
@@ -147,7 +147,7 @@ const (
 	FirewallActionSrcNAT              = "src-nat"
 )
 
-//MangleRule /ip/firewall/mangle
+// MangleRule /ip/firewall/mangle
 type MangleRule struct {
 	ID string `mikrotik:".id"`
 
@@ -487,7 +487,7 @@ type LtePrint struct {
 	Disalbed     bool
 }
 
-//Resource from `/system resource print`
+// Resource from `/system resource print`
 type Resource struct {
 	Uptime               string `mikrotik:"uptime"`
 	BuildTime            string `mikrotik:"build-time"`
@@ -505,4 +505,9 @@ type Resource struct {
 	ArchitectureName     string `mikrotik:"architecture-name"`
 	BoardName            string `mikrotik:"board-name"`
 	Platform             string `mikrotik:"platform"`
+}
+
+type Ethernet struct {
+	// TODO: add other fields
+	PoEOut string `mikrotik:"poe-out"` // auto-on, forced-on, off
 }

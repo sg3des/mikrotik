@@ -10,7 +10,7 @@ import (
 	routeros "gopkg.in/routeros.v2"
 )
 
-//Dial to mikrotik router
+// Dial to mikrotik router
 func Dial(addr, user, pass string) (*Mikrotik, error) {
 	c, err := routeros.Dial(addr, user, pass)
 	if err != nil {
@@ -23,7 +23,7 @@ func Dial(addr, user, pass string) (*Mikrotik, error) {
 	return mik, nil
 }
 
-//DialTimeout dial to mikrotik router with timeout
+// DialTimeout dial to mikrotik router with timeout
 func DialTimeout(addr, user, pass string, timeout time.Duration) (*Mikrotik, error) {
 	c, err := routeros.DialTimeout(addr, user, pass, timeout)
 	if err != nil {
@@ -36,7 +36,7 @@ func DialTimeout(addr, user, pass string, timeout time.Duration) (*Mikrotik, err
 	return mik, nil
 }
 
-//Mikrotik is common struct contains connection to device and API-tree
+// Mikrotik is common struct contains connection to device and API-tree
 type Mikrotik struct {
 	Conn      *routeros.Client
 	connMutex sync.Mutex
@@ -84,16 +84,11 @@ func (mik *Mikrotik) setMikrotikCommands() {
 		SSTPServer: cmd{mikrotik: mik, path: "/interface/sstp-server"},
 		SSTPClient: cmd{mikrotik: mik, path: "/interface/sstp-client"},
 		Wireless: wireless{
-			cmd: cmd{
-				mikrotik: mik,
-				path:     "/interface/wireless",
-			},
+			cmd:              cmd{mikrotik: mik, path: "/interface/wireless"},
 			SecurityProfiles: cmd{mikrotik: mik, path: "/interface/wireless/security-profiles"},
 		},
-		Lte: lte{
-			mikrotik: mik,
-			path:     "/interface/lte",
-		},
+		Lte:      lte{mikrotik: mik, path: "/interface/lte"},
+		Ethernet: cmd{mikrotik: mik, path: "/interface/ethernet"},
 	}
 
 	mik.PPP = ppp{
@@ -126,7 +121,7 @@ func (ping *Ping) Start() ([]*PingResponse, error) {
 	return pingResp, nil
 }
 
-//Run one line command on mikrotik by api
+// Run one line command on mikrotik by api
 func (mik *Mikrotik) Run(cmd string) (*routeros.Reply, error) {
 	mik.connMutex.Lock()
 	defer mik.connMutex.Unlock()
@@ -141,7 +136,7 @@ func (mik *Mikrotik) Run(cmd string) (*routeros.Reply, error) {
 	return re, err
 }
 
-//RunArgs run many line command on mikrotik by api
+// RunArgs run many line command on mikrotik by api
 func (mik *Mikrotik) RunArgs(cmd string, args ...string) (*routeros.Reply, error) {
 	mik.connMutex.Lock()
 	defer mik.connMutex.Unlock()
@@ -156,7 +151,7 @@ func (mik *Mikrotik) RunArgs(cmd string, args ...string) (*routeros.Reply, error
 	return re, err
 }
 
-//RunMarshal - run command and marhsal response to interface struct
+// RunMarshal - run command and marhsal response to interface struct
 func (mik *Mikrotik) RunMarshal(cmd string, v interface{}) error {
 	re, err := mik.Run(cmd)
 	if err != nil {
@@ -180,12 +175,12 @@ func (mik *Mikrotik) ParseResponce(re *routeros.Reply, v interface{}) error {
 	return nil
 }
 
-//Print returns all items by apipath and marshal it to passed structure
+// Print returns all items by apipath and marshal it to passed structure
 func (mik *Mikrotik) Print(apipath string, v interface{}) error {
 	return mik.RunMarshal(apipath, v)
 }
 
-//Add item from passed struct to apipath
+// Add item from passed struct to apipath
 func (mik *Mikrotik) Add(apipath string, v interface{}) error {
 	re, err := mik.RunArgs(apipath, ToArgs(v)...)
 	if err != nil {
@@ -199,38 +194,38 @@ func (mik *Mikrotik) Add(apipath string, v interface{}) error {
 	return nil
 }
 
-//Set value of item by id
+// Set value of item by id
 func (mik *Mikrotik) Set(apipath, id string, v interface{}) error {
 	args := append([]string{"=.id=" + id}, ToArgs(v)...)
 	_, err := mik.RunArgs(apipath, args...)
 	return err
 }
 
-//SetOne set value to one field
+// SetOne set value to one field
 func (mik *Mikrotik) SetOne(apipath, name, value string) error {
 	_, err := mik.RunArgs(apipath, fmt.Sprintf("=%s=%s", name, value))
 	return err
 }
 
-//Remove item by id
+// Remove item by id
 func (mik *Mikrotik) Remove(apipath, id string) error {
 	_, err := mik.RunArgs(apipath, "=.id="+id)
 	return err
 }
 
-//Enable item by id
+// Enable item by id
 func (mik *Mikrotik) Enable(apipath, id string) error {
 	_, err := mik.RunArgs(apipath, "=.id="+id)
 	return err
 }
 
-//Disable item by id
+// Disable item by id
 func (mik *Mikrotik) Disable(apipath, id string) error {
 	_, err := mik.RunArgs(apipath, "=.id="+id)
 	return err
 }
 
-//Comment - add comment to item by id
+// Comment - add comment to item by id
 func (mik *Mikrotik) Comment(apipath, id, comment string) error {
 	_, err := mik.RunArgs(apipath, "=.id="+id, "=comment="+comment)
 	return err
@@ -247,6 +242,7 @@ type ip struct {
 	Route    cmd
 	Firewall firewall
 }
+
 type firewall struct {
 	NAT    cmd
 	Mangle cmd
@@ -357,7 +353,7 @@ func (c *identity) SetName(name string) error {
 	return c.mikrotik.SetOne(c.path+"/set", "name", name)
 }
 
-//netinterface not have add method
+// netinterface not have add method
 type netinterface struct {
 	mikrotik *Mikrotik
 	path     string
@@ -366,6 +362,7 @@ type netinterface struct {
 	SSTPServer cmd
 	Wireless   wireless
 	Lte        lte
+	Ethernet   cmd
 }
 
 func (c *netinterface) List(v interface{}) error {
@@ -430,7 +427,7 @@ func (c *wireless) Scan(name, duration string) (APlist []*WirelessAP, err error)
 		return list, err
 	}
 
-	//remove duplicates
+	// remove duplicates
 	for i := range list {
 		if c.contains(APlist, list[i]) {
 			continue
@@ -477,6 +474,36 @@ func (l *lte) InfoOnce(id string, lteInfo *LteInfo) error {
 func (l *lte) List(v interface{}) error {
 	return l.mikrotik.Print(l.path+"/print", v)
 }
+
+type ethernet struct {
+	mikrotik *Mikrotik
+	path     string
+}
+
+// func (e *ethernet) Name() error {
+// 	var resp struct{ Name string }
+// 	err := poe.mikrotik.Print(poe.path+"/print", &resp)
+
+// 	return resp.Name, err
+// }
+
+// func (l *ethernet) PoEOutAutoOn() error {
+// 	res, err := l.mikrotik.RunArgs(l.path+"/poe-out", "=.id="+id, "=once=")
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	err = l.mikrotik.ParseResponce(res, lteInfo)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	return nil
+// }
+
+// func (l *ethernet) List(v interface{}) error {
+// 	return l.mikrotik.Print(l.path+"/print", v)
+// }
 
 type ppp struct {
 	AAA        cfg
