@@ -511,3 +511,41 @@ type Ethernet struct {
 	// TODO: add other fields
 	PoEOut string `mikrotik:"poe-out"` // auto-on, forced-on, off
 }
+
+type File struct {
+	ID           string `mikrotik:".id"`
+	Name         string
+	Type         string
+	Size         int
+	CreationTime string `mikrotik:"creation-time"`
+	Contents     string `mikrotik:"contents"`
+}
+
+type Certificate struct {
+	ID              string `mikrotik:".id"`
+	Name            string
+	DigestAlgorithm string `mikrotik:"digest-algorithm"`
+	KeyType         string `mikrotik:"key-type"`
+	Country         string
+	State           string
+	Locality        string
+	Organization    string
+	Unit            string
+	CommonName      string `mikrotik:"common-name"`
+	KeySize         int    `mikrotik:"key-size"`
+	SubjectAltName  string `mikrotik:"subject-alt-name"`
+	DaysValid       int    `mikrotik:"days-valid"`
+	Trusted         bool
+	KeyUsage        string `mikrotik:"key-usage"`
+	Ca              string
+	SerialNumber    string `mikrotik:"serial-number"`
+	Fingerprint     string
+	Akid            string
+	Skid            string
+	InvalidBefore   string `mikrotik:"invalid-before"`
+	InvalidAfter    string `mikrotik:"invalid-after"`
+	ExpiresAfter    string `mikrotik:"expires-after"`
+	PrivateKey      bool   `mikrotik:"private-key"`
+	Crl             bool
+	Issued          bool
+}

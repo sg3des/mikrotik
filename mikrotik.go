@@ -41,10 +41,12 @@ type Mikrotik struct {
 	Conn      *routeros.Client
 	connMutex sync.Mutex
 
-	IP        ip
-	System    system
-	Interface netinterface
-	PPP       ppp
+	IP          ip
+	System      system
+	Interface   netinterface
+	PPP         ppp
+	File        file
+	Certificate certificate
 
 	debug bool
 }
@@ -96,6 +98,16 @@ func (mik *Mikrotik) setMikrotikCommands() {
 		Secret:     cmd{mikrotik: mik, path: "/ppp/secret"},
 		L2tpSecret: cmd{mikrotik: mik, path: "/ppp/l2tp-secret"},
 		Profile:    cmd{mikrotik: mik, path: "/ppp/profile"},
+	}
+
+	mik.File = file{
+		mikrotik: mik,
+		path:     "/file",
+	}
+
+	mik.Certificate = certificate{
+		mikrotik: mik,
+		path:     "/certificate",
 	}
 }
 
@@ -510,4 +522,89 @@ type ppp struct {
 	L2tpSecret cmd
 	Profile    cmd
 	Secret     cmd
+}
+
+// files
+type file struct {
+	mikrotik *Mikrotik
+	path     string
+}
+
+func (f *file) List(v interface{}) error {
+	return f.mikrotik.Print(f.path+"/print", v)
+}
+
+func (f *file) Get(id string, v interface{}) error {
+	return f.Find("=.id="+id, v)
+}
+
+func (f *file) Find(where string, v interface{}) error {
+	re, err := f.mikrotik.RunArgs(f.path+"/print", "?"+where)
+	if err != nil {
+		return err
+	}
+
+	return f.mikrotik.ParseResponce(re, v)
+}
+
+func (f *file) Remove(id string) error {
+	_, err := f.mikrotik.RunArgs(f.path+"/remove", "=.id="+id)
+
+	return err
+}
+
+// certificates
+type certificate struct {
+	mikrotik *Mikrotik
+	path     string
+}
+
+func (c *certificate) List(v interface{}) error {
+	return c.mikrotik.Print(c.path+"/print", v)
+}
+
+func (c *certificate) Export(id, passphrase, fileType, fileName string) error {
+	args := []string{"=.id=" + id, "=export-passphrase=" + passphrase}
+
+	if fileType != "" {
+		args = append(args, "=type="+fileType)
+	}
+
+	if fileName != "" {
+		args = append(args, "=file-name="+fileName)
+	}
+
+	_, err := c.mikrotik.RunArgs(c.path+"/export-certificate", args...)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *certificate) Sign(id, ca string) error {
+	_, err := c.mikrotik.RunArgs(c.path+"/sign", "=.id="+id, "=ca="+ca)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *certificate) Revoke(id string) error {
+	_, err := c.mikrotik.RunArgs(c.path+"/issued-revoke", "=.id="+id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *certificate) Remove(id string) error {
+	_, err := c.mikrotik.RunArgs(c.path+"/remove", "=.id="+id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
