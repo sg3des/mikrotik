@@ -558,6 +558,9 @@ type certificate struct {
 	mikrotik *Mikrotik
 	path     string
 }
+func (c *certificate) Add(v interface{}) error {
+	return c.mikrotik.Add(c.path+"/add", v)
+}
 
 func (c *certificate) List(v interface{}) error {
 	return c.mikrotik.Print(c.path+"/print", v)
